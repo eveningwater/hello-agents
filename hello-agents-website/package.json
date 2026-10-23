@@ -1,0 +1,25 @@
+{
+  "name": "hello-agents-docs",
+  "version": "1.0.0",
+  "description": "Hello Agents 智能体学习与实践指南 - 静态文档网站",
+  "type": "module",
+  "scripts": {
+    "dev": "vitepress dev docs",
+    "build:only": "vitepress build docs",
+    "build": "vitepress build docs && node scripts/package-site.mjs",
+    "preview": "npm run build:only && vitepress preview docs",
+    "deploy": "npm run build"
+  },
+  "dependencies": {
+    "@mdit/plugin-katex": "^0.24.1",
+    "katex": "^0.16.27",
+    "markdown-it": "^14.1.0",
+    "vitepress": "^1.1.0",
+    "vue": "^3.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@vitejs/plugin-vue": "^5.0.0",
+    "vite": "^5.0.0"
+  }
+}
