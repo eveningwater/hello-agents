@@ -1,23 +1,36 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Redirecting...</title>
     <script>
+      // 从构建产物里探测实际 base（兼容 GitHub Pages 子路径 和 独立域名根路径）
       ;(() => {
-        const base = '/hello-agents/'
+        // 用 <base href> 或 manifest 的根路径做启发式探测，
+        // 找不到任何线索时退化为 "/" 并交给 VitePress 的 hash 路由兜底
+        const manifestHref = (document.querySelector('link[rel=manifest]') || {}).href || ''
+        const manifestBase = manifestHref.replace(/manifest\.json$/, '')
+        const scriptBase = Array.from(document.scripts)
+          .map((s) => s.src)
+          .find((src) => src.includes('.vitepress') || src.includes('/assets/'))
+        const computedBase = manifestBase || (scriptBase ? new URL(scriptBase, location.href).pathname.replace(/assets\/.*/, '') : '/')
+        const base = computedBase.endsWith('/') ? computedBase : computedBase + '/'
+
         const { pathname, search, hash } = window.location
-        if (!pathname.startsWith(base)) {
-          window.location.replace(base)
+        // 已经是 hash 路由，直接留在 VitePress 自己处理
+        if (hash.startsWith('#')) return
+
+        // 用户访问了裸路径，重定向回 root + '# + path'
+        const barePath = pathname.startsWith(base) ? pathname.slice(base.length) : pathname
+        // 如果访问的是 root (base 本身)，那就是首页，直接重定向到 base + '#'
+        if (!barePath.replace(/^\/+|\/+$/g, '')) {
+          window.location.replace(base + '#' + search + hash)
           return
         }
-        const path = pathname.slice(base.length - 1)
-        const target = base + '#'+ path + search + hash
-        window.location.replace(target)
+        window.location.replace(base + '#' + barePath + search + hash)
       })()
     </script>
   </head>
   <body></body>
 </html>
-

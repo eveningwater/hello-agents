@@ -4,11 +4,17 @@ import { katex } from '@mdit/plugin-katex'
 
 const themeParts = generateThemeConfigParts()
 
+// VITEPRESS_BASE 由构建环境传入，用于适配不同部署平台：
+//   GitHub Pages + 仓库 hello-agents -> VITEPRESS_BASE=/hello-agents/
+//   阿里云 ESA / 独立域名            -> VITEPRESS_BASE=/
+// 未设置时默认 /hello-agents/（本地预览和 GitHub Pages 默认）
+const base = process.env.VITEPRESS_BASE ?? '/hello-agents/'
+
 export default defineConfig({
   srcDir: '.vitepress/__content',
   title: 'Hello Agents',
   description: '智能体学习与实践指南',
-  base: '/hello-agents/',
+  base,
   outDir: '../hello-agents',
   head: [],
 

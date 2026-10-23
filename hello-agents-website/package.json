@@ -7,6 +7,8 @@
     "dev": "vitepress dev docs",
     "build:only": "vitepress build docs",
     "build": "vitepress build docs && node scripts/package-site.mjs",
+    "build:esa": "VITEPRESS_BASE=/ pnpm run build",
+    "build:pages": "VITEPRESS_BASE=/hello-agents/ pnpm run build",
     "preview": "npm run build:only && vitepress preview docs",
     "deploy": "npm run build"
   },
